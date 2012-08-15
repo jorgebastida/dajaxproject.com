@@ -1,0 +1,81 @@
+{% extends 'website/base_dajaxice_example.html' %}
+{% load static %}
+{% load url from future %}
+
+{% block logo %}<a href="{% url 'index' %}"><img src="{% static '/static/img/dajax.png' %}" alt="dajaxice"></a>{% endblock %}
+
+
+{% block examples %}
+
+
+{% with url='/random/' %}
+<li class="{% if request.path == url %}active{% endif %}">
+    <a href="{{ url }}">
+      <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Random Example
+    </a>
+</li>
+{% endwith %}
+
+
+{% with url='/multiply/' %}
+<li class="{% if request.path == url %}active{% endif %}">
+    <a href="{{ url }}">
+      <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Multiply Example
+    </a>
+</li>
+{% endwith %}
+
+{% with url='/forms/' %}
+<li class="{% if request.path == url %}active{% endif %}">
+    <a href="{{ url }}">
+      <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Simple Form
+    </a>
+</li>
+{% endwith %}
+
+
+{% with url='/fullform/' %}
+<li class="{% if request.path == url %}active{% endif %}">
+    <a href="{{ url }}">
+      <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Django Forms
+    </a>
+</li>
+{% endwith %}
+
+{% with url='/maps/' %}
+<li class="{% if request.path == url %}active{% endif %}">
+    <a href="{{ url }}">
+      <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Map Example
+    </a>
+</li>
+{% endwith %}
+
+{% with url='/flickr/' %}
+<li class="{% if request.path == url %}active{% endif %}">
+    <a href="{{ url }}">
+      <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Flickr in place editor
+    </a>
+</li>
+{% endwith %}
+
+{% with url='/pagination/' %}
+<li class="{% if request.path == url %}active{% endif %}">
+    <a href="{{ url }}">
+      <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Pagination example
+    </a>
+</li>
+{% endwith %}
+
+{% endblock %}
+
+
+{% block breadcrumb_subsection %}dajax{% endblock %}
+
+
+{% block example %}
+
+DAJAX EXAMPLE
+
+{% endblock %}
+
+

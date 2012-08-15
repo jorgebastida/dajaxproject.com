@@ -1,0 +1,106 @@
+{% extends "website/base_dajax_example.html"%}
+{% load url from future %}
+
+{% block breadcrumb_example %}Form Example{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+
+<style type="text/css" media="screen">
+    .error{
+        border:1px solid red !important;
+        background-color:#fdd !important;
+    }
+</style>
+
+<script type="text/javascript" charset="utf-8">
+
+/*
+jQuery form.serialize()
+https://github.com/cowboy/jquery-misc/blob/master/jquery.ba-serializeobject.js
+*/
+(function($,undefined){
+  '$:nomunge'; // Used by YUI compressor.
+
+  $.fn.serializeObject = function(){
+    var obj = {};
+
+    $.each( this.serializeArray(), function(i,o){
+      var n = o.name,
+        v = o.value;
+
+        obj[n] = obj[n] === undefined ? v
+          : $.isArray( obj[n] ) ? obj[n].concat( v )
+          : [ obj[n], v ];
+    });
+
+    return obj;
+  };
+
+})(jQuery);
+
+function send_form(){
+    Dajaxice.examples.send_form(Dajax.process,{'form':$('#my_form').serialize(true)});
+}
+</script>
+
+{% endblock %}
+
+{% block example %}
+
+<h1>Django form validation example</h1>
+<p>In this example we will use and validate a Django form through dajax.</p>
+
+<hr/>
+    <form action="" method="post" id="my_form" accept-charset="utf-8">
+        {{ form.as_p }}
+        <p><input type="button" class="btn" value="Register" onclick="send_form();"></p>
+    </form>
+<hr/>
+
+<h3>forms.py</h3>
+<pre class="prettyprint language-py">
+from django import forms
+
+class ExampleForm(forms.Form):
+    username = forms.CharField(max_length=30, label=u'Username')
+    email = forms.EmailField(label=u'Email address')
+</pre>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+@dajaxice_register
+def send_form(request, form):
+    dajax = Dajax()
+    form = ExampleForm(form)
+
+    if form.is_valid():
+        dajax.remove_css_class('#my_form input', 'error')
+        dajax.alert("Form is_valid(), your username is: %s" % form.cleaned_data.get('username'))
+    else:
+        dajax.remove_css_class('#my_form input', 'error')
+        for error in form.errors:
+            dajax.add_css_class('#id_%s' % error, 'error')
+
+    return dajax.json()
+</pre>
+
+
+<h3>html</h3>
+<pre class="prettyprint language-html">
+&lt;select onchange="Dajaxice.examples.updatecombo(Dajax.process, {'option':this.value})" size="1"&gt;
+&lt;form action="" method="post" id="my_form" accept-charset="utf-8"&gt;
+    &#123;&#123; form.as_p &#125;&#125;
+    &lt;p&gt;&lt;input type="button" value="Send" onclick="send_form();"&gt;&lt;/p&gt;
+&lt;/form&gt;
+</pre>
+
+
+<h3>Javascript</h3>
+<pre class="prettyprint language-js">
+function send_form(){
+    Dajaxice.examples.send_form(Dajax.process,{'form':$('#my_form').serialize(true)});
+}
+</pre>
+
+{% endblock %}

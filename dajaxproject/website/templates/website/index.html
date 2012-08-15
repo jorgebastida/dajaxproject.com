@@ -1,0 +1,70 @@
+{% extends 'website/base.html' %}
+{% load static %}
+{% load url from future %}
+
+{% block content %}
+<div class="landing-container">
+
+    <div class="landing-container">
+        <div class="landing-row">
+            <div class="block4"><img src="{% static '/static/img/dajaxproject.png' %}" alt="logo"></div>
+            <div class="block8 actor epic">
+                <h1>easy to use AJAX libraries for django.</h1>
+                <p>fast, easy and lightweight libraries to implement AJAX inside your django projects. Ready to use in 5 minutes.</p>
+                <p><a class="btn btn-large" href="#dajaxice">I want to know more!</a> <a href="http://django-dajaxice.readthedocs.org/en/latest/quickstart.html" class="btn btn-large btn-primary">Quick Start!</a></p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <a name="dajaxice"></a>
+    </div>
+
+    <div class="landing-container grey">
+        <a href="https://github.com/jorgebastida/django-dajaxice/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+
+        <div class="landing-row">
+            <div class="block8">
+                <h2>django-dajaxice</h2>
+                <p class="info">dajaxice is the communication core of dajaxproject. Its main goal is to <strong>trivialize the asynchronous communication</strong> between the django server side code and your js code.</p>
+
+                <p class="info">dajaxice is <strong>JS-framework agnostic</strong> and focuses on decoupling the presentation logic from the server-side logic. dajaxice only requires 5 minutes to start working.</p>
+
+                <p class="info actions">
+                    <a href="{% url 'dajaxice-example' %}" class="btn btn-large btn-primary">Examples</a> <a href="http://github.com/jorgebastida/django-dajaxice/" class="btn btn-large">Github</a> <a href="http://django-dajaxice.readthedocs.org/en/latest/" class="btn btn-large">Documentation</a>
+                </p>
+
+            </div>
+            <div class="block4"><img src="{% static '/static/img/dajaxice.png' %}" alt="dajaxice"></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="landing-container">
+        <div class="landing-row">
+
+             <a href="https://github.com/jorgebastida/django-dajax/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+
+            <div class="block4"><img src="{% static '/static/img/dajax.png' %}" alt="dajax"></div>
+            <div class="block8">
+
+                <h2><a name="dajax">django-dajax</a></h2>
+
+                <p class="info">dajax is a powerful tool to easily and super-quickly develop asynchronous presentation logic in web applications <strong>using python</strong> and almost no JS code.</p>
+
+                <p class="info">It supports <strong>up to four of the most popular JS frameworks:</strong> jQuery, Prototype, Dojo and mootols.</p>
+
+                <p class="info actions">
+                    <a href="{% url 'dajax-multiply-example' %}" class="btn btn-large btn-primary">Examples</a> <a href="http://github.com/jorgebastida/django-dajax/" class="btn btn-large">Github</a> <a href="http://django-dajax.readthedocs.org/en/latest/" class="btn btn-large">Documentation</a>
+                </p>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="grey">
+        <div class="landing-row footer">
+             {% include 'website/footer.html' %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

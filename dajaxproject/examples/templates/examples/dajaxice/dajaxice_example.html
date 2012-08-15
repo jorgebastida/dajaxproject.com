@@ -1,0 +1,44 @@
+{% extends "website/base_dajaxice_example.html"%}
+{% load url from future %}
+
+{% block breadcrumb_example %}Simple Example{% endblock %}
+
+{% block example %}
+
+<script type="text/javascript" charset="utf-8">
+    function my_callback(data){
+        alert(data.message);
+    }
+</script>
+
+<h1>Simple dajaxice example</h1>
+<p>This is the basic example. We'll ask for a message from the server and show it the browser.</p>
+
+<hr/>
+<input type="button" value="Get message from server!" class="btn btn-large" onclick="Dajaxice.examples.dajaxice_example(my_callback)">
+<hr/>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+from django.utils import simplejson
+from dajaxice.decorators import dajaxice_register
+
+@dajaxice_register
+def dajaxice_example(request):
+    return simplejson.dumps({'message':'Hello from Python!'})
+</pre>
+
+<h3>html</h3>
+<pre class="prettyprint language-html">
+&lt;input type="button" onclick="Dajaxice.examples.dajaxice_example(my_callback)" value="Get message from server!"&gt;
+</pre>
+
+<h3>javascript</h3>
+<pre class="prettyprint language-js">
+function my_callback(data){
+    alert(data.message);
+}
+</pre>
+
+
+{% endblock %}

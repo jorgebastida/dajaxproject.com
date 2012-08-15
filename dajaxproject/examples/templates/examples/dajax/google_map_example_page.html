@@ -1,0 +1,140 @@
+{% extends "website/base_dajax_example.html"%}
+{% load url from future %}
+{% load static %}
+
+{% block breadcrumb_example %}Map Example{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyD3WJPPzDrYyjrnURVFZD5zgsHCLJj-m-k&sensor=true"></script>
+<script type="text/javascript" src="{% static 'libs/gmaps.js' %}"></script>
+
+<style type="text/css" media="screen">
+	#the_map{
+		border:1px solid black;
+		width:650px;
+		height:250px;
+	}
+	#example_log{
+		width:400px;
+	}
+</style>
+
+{% endblock %}
+
+{% block example %}
+
+<h1>Map example</h1>
+<p>In this example, by clicking on the "request points" buttom, it will load three points over the map. By dragging and dropping these points, they will send the new coordenates to the server. Once they are in the server, it will send them back as a log message to the #example_log element.
+</p>
+<p>In this example we are using the gorgeous <a href="http://hpneo.github.com/gmaps/">gmaps.js</a> library.</p>
+
+<hr/>
+<div id="the_map"></div>
+<form class="form-inline" style="margin-top:10px;">
+<input type="button" value="Request Points" class="btn" onclick="Dajaxice.examples.request_points(Dajax.process);">
+<input type="text" id="example_log">
+</form>
+<hr/>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+from dajax.core import Dajax
+from dajaxice.decorators import dajaxice_register
+
+@dajaxice_register
+def request_points(request):
+    dajax = Dajax()
+    points = [
+        {'lat':37.41444798751896, 'lng':-122.0916223526001, 'text':'Some Site #1'},
+        {'lat':37.412061929307924, 'lng':-122.08582878112793, 'text':'Other Site #2'},
+        {'lat':37.41301636171327, 'lng':-122.0780611038208, 'text':'Other Site #3'}]
+
+    dajax.add_data(points, 'example_draw_points')
+    dajax.assign('#example_log', 'value', "3 Points loaded...")
+    return dajax.json()
+
+
+@dajaxice_register
+def move_point(request, lat, lng):
+    dajax = Dajax()
+    message = "Saved new location at, %s, %s" % (lat, lng)
+    dajax.assign('#example_log', 'value', message)
+    return dajax.json()
+
+</pre>
+
+<h3>html</h3>
+<pre class="prettyprint language-html">
+&lt;div id="the_map"&gt;&lt;/div&gt;
+&lt;input type="button" value="Request Points" onclick="Dajaxice.examples.request_points(Dajax.process);"&gt;
+&lt;input type="text" id="example_log"&gt;
+</pre>
+
+<h3>JavaScript</h3>
+<pre class="prettyprint language-js">
+var map;
+var icon = new google.maps.MarkerImage('http://static.dajaxproject.com/img/starpointer.png');
+
+/* Create the map */
+$(document).ready(function(){
+  prettyPrint();
+  map = new GMaps({
+    div: '#the_map',
+    lat: 37.413391,
+    lng: -122.085013
+  });
+
+});
+
+/* Draw points callback */
+function example_draw_points(data){
+    for (var i=0; i < data.length; i++) {
+        map.addMarker({
+            lat: data[i].lat,
+            lng: data[i].lng,
+            details: {id: i},
+            dragend: function(e){
+                Dajaxice.examples.move_point(Dajax.process,
+                    {'lat':e.position.lat(),'lng':e.position.lng()});
+            },
+            draggable: true,
+            icon: icon
+        });
+    };
+}
+</pre>
+
+
+<script type="text/javascript">
+var map;
+
+$(document).ready(function(){
+  prettyPrint();
+  map = new GMaps({
+    div: '#the_map',
+    lat: 37.413391,
+    lng: -122.085013
+  });
+
+});
+
+
+function example_draw_points(data){
+    for (var i=0; i < data.length; i++) {
+
+        var icon = new google.maps.MarkerImage('http://static.dajaxproject.com/img/starpointer.png');
+        map.addMarker({
+            lat: data[i].lat,
+            lng: data[i].lng,
+            details: {id: i},
+            dragend: function(e){ Dajaxice.examples.move_point(Dajax.process, {'lat':e.position.lat(),'lng':e.position.lng()});},
+            draggable: true,
+            icon: icon
+        });
+    };
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "website/base_dajax_example.html"%}
+{% load url from future %}
+
+{% block breadcrumb_example %}Random Example{% endblock %}
+
+{% block example %}
+
+<h1>Random example</h1>
+<p>In this example we will create a random number using python, and we will send it to the #result element.</p>
+
+<hr/>
+<form class="form-inline" action="#">
+<input type="text" value="" id="result" class="input-small">
+<input type="button" class="btn" value="Random!" onclick="Dajaxice.examples.randomize(Dajax.process)">
+</form>
+<hr/>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+import random
+from dajax.core import Dajax
+from dajaxice.decorators import dajaxice_register
+
+@dajaxice_register
+def randomize(request):
+    dajax = Dajax()
+    dajax.assign('#result', 'value', random.randint(1, 10))
+    return dajax.json()
+
+</pre>
+
+<h3>html</h3>
+<pre class="prettyprint language-html">
+&lt;input type="text" value="" id="result"&gt;
+&lt;input type="button" onclick="Dajaxice.examples.randomize(Dajax.process)" value="Random!"&gt;
+</pre>
+
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "website/base_dajaxice_example.html"%}
+{% load url from future %}
+
+{% block breadcrumb_example %}Args Example{% endblock %}
+
+{% block example %}
+
+<script type="text/javascript" charset="utf-8">
+    function callback(data){
+        alert(data.message);
+    }
+</script>
+
+<h1>Args example</h1>
+<p>In this example we will send some text to the server and and display it in an alert box.</p>
+
+<hr/>
+<form class="form-inline" action="#">
+<input type="text" id="text" class="input-medium" placeholder="Add some text..."/>
+<input type="button" class="btn" value="Send!" onclick="Dajaxice.examples.args_example(callback, {'text':$('#text').val()})" />
+</form>
+<hr/>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+from django.utils import simplejson
+from dajaxice.decorators import dajaxice_register
+
+@dajaxice_register
+def args_example(request, text):
+    return simplejson.dumps({'message':'Your message is %s!' % text})
+</pre>
+
+<h3>html</h3>
+<pre class="prettyprint language-html">
+&lt;input type="text" id="text"/&gt;
+&lt;input type="button" onclick="Dajaxice.examples.args_example(callback, {'text':$('#text').val()})" value="Send!"/&gt;
+
+</pre>
+
+<h3>javascript</h3>
+<pre class="prettyprint language-js">
+function callback(data){
+    alert(data.message);
+}
+</pre>
+
+
+{% endblock %}

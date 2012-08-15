@@ -1,0 +1,54 @@
+{% extends "website/base_dajax_example.html"%}
+{% load url from future %}
+
+{% block breadcrumb_example %}Multiply Example{% endblock %}
+
+{% block example %}
+
+<script type="text/javascript" charset="utf-8">
+    function calculate(){
+		Dajaxice.examples.multiply(Dajax.process,{'a':$('#a').val(),'b':$('#b').val()})
+	}
+</script>
+
+<h1>Multiply example</h1>
+<p>This is the basic example. We'll ask for a message from the server and show it the browser.</p>
+
+<hr/>
+<form class="form-inline" action="#">
+<input type="text" value="5" id="a" class="input-small"> x <input type="text" value="6" id="b" class="input-small"> = <input type="text" value="" id="result" class="input-small">
+<input type="button" class="btn" value="Multiply!" onclick="calculate();">
+</form>
+<hr/>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+from dajax.core import Dajax
+from dajaxice.decorators import dajaxice_register
+
+@dajaxice_register
+def multiply(request, a, b):
+    dajax = Dajax()
+    result = int(a) * int(b)
+    dajax.assign('#result','value',str(result))
+    return dajax.json()
+
+</pre>
+
+<h3>html</h3>
+<pre class="prettyprint language-html">
+&lt;input type="text" value="5" id="a"&gt; x
+&lt;input type="text" value="6" id="b"&gt; =
+&lt;input type="text" value="" id="result"&gt;
+&lt;input type="button" value="Multiply!" onclick="calculate();"&gt;
+</pre>
+
+<h3>javascript</h3>
+<pre class="prettyprint language-js">
+function calculate(){
+    Dajaxice.examples.multiply(Dajax.process,{'a':$('#a').val(),'b':$('#b').val()})
+}
+</pre>
+
+
+{% endblock %}

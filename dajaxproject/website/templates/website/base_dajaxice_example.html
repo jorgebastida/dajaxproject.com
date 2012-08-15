@@ -1,0 +1,87 @@
+{% extends 'website/base.html' %}
+{% load static %}
+{% load url from future %}
+
+{% block extra_body %} onload="prettyPrint()"; {% endblock %}
+
+
+{% block extra_head %}
+<link href="{% static '/static/libs/google-code-prettify/prettify.css' %}" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="{% static '/static/libs/google-code-prettify/prettify.js' %}"></script>
+<style type="text/css">
+body{
+  margin-top:40px;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+
+    <div class="row example">
+
+      <div class="span3">
+
+        {% block logo %}<a href="{% url 'index' %}"><img src="{% static '/static/img/dajaxice.png' %}" alt="dajaxice"></a>{% endblock %}
+
+        <ul class="nav nav-pills nav-stacked">
+          <li>
+            <a target="_blank" href="{% block documentation_link %}http://django-dajaxice.readthedocs.org/en/latest/{% endblock %}">
+              <i class="icon-book"></i> Documentation
+            </a>
+          </li>
+          <li>
+            <a target="_blank" href="{% block github_link %}http://github.com/jorgebastida/django-dajaxice/{% endblock %}">
+              <i class="icon-heart"></i> Github
+            </a>
+          </li>
+
+          <li class="divider"></li>
+
+          {% block examples %}
+
+          {% with url='/dajaxice/' %}
+          <li class="{% if request.path == url %}active{% endif %}">
+            <a href="{{ url }}">
+              <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Simple example
+            </a>
+          </li>
+          {% endwith %}
+
+          {% with url='/dajaxice-args/' %}
+          <li class="{% if request.path == url %}active{% endif %}">
+            <a href="{{ url }}">
+              <i class="icon-certificate {% if request.path == url %}icon-white{% endif %}"></i> Simple args example
+            </a>
+          </li>
+          {% endwith %}
+
+          {% endblock %}
+
+        </ul>
+
+      </div>
+      <div class="span9">
+
+        <ul class="breadcrumb">
+          <li><a href="/" class="active">Home</a> <span class="divider">/</span></li>
+          <li><a href="{% url 'dajaxice-example' %}">{% block breadcrumb_subsection %}dajaxice{% endblock %}</a> <span class="divider">/</span></li>
+          <li>{% block breadcrumb_example %}{% endblock %}</li>
+        </ul>
+
+        {% block example %}{% endblock %}
+
+     </div>
+    </div>
+
+    <hr>
+
+    <footer>
+      <p>{% include 'website/footer.html' %}</p>
+    </footer>
+
+  </div> <!-- /container -->
+
+{% endblock %}
+

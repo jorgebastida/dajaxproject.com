@@ -1,0 +1,81 @@
+{% extends "website/base_dajax_example.html"%}
+{% load url from future %}
+
+{% block breadcrumb_example %}Pagination Example{% endblock %}
+
+{% block example %}
+
+<h1>Pagination example</h1>
+<p>In this example we will create a paginator using the <b>django.core.paginator</b>.</p>
+
+<hr/>
+
+    <div id="pagination">
+        {% include "examples/dajax/pagination_page.html" %}
+    </div>
+
+<hr/>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+from dajaxwebsite.examples.views import get_pagination_page
+from django.template.loader import render_to_string
+from dajaxice.decorators import dajaxice_register
+
+@dajaxice_register
+def pagination(request, p):
+
+    items = get_pagination_page(p)
+    render = render_to_string('examples/dajax/pagination_page.html', {'items': items})
+
+    dajax = Dajax()
+    dajax.assign('#pagination', 'innerHTML', render)
+    return dajax.json()
+</pre>
+
+<h3>views.py</h3>
+<pre class="prettyprint language-py">
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+
+def get_pagination_page(page=1):
+    items = range(0, 100)
+    paginator = Paginator(items, 10)
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+
+    try:
+        items = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        items = paginator.page(paginator.num_pages)
+
+    return items
+</pre>
+
+<h3>html</h3>
+
+<pre class="prettyprint language-html">
+&#123;% for i in items.object_list %&#125;
+    &#123;&#123; i &#125;&#125;&lt;br&gt;
+&#123;% endfor %&#125;
+
+&lt;div class="pagination"&gt;
+    &lt;span class="step-links"&gt;
+        &#123;% if items.has_previous %&#125;
+            &lt;a href="#" onclick="Dajaxice.examples.pagination(Dajax.process,{'p':&#123;&#123; items.previous_page_number &#125;&#125;})"&gt;previous&lt;/a&gt;
+        &#123;% endif %&#125;
+
+        &lt;span class="current"&gt;
+            Page &#123;&#123; items.number &#125;&#125; of &#123;&#123; items.paginator.num_pages &#125;&#125;.
+        &lt;/span&gt;
+
+        &#123;% if items.has_next %&#125;
+            &lt;a href="#" onclick="Dajaxice.examples.pagination(Dajax.process,{'p':&#123;&#123; items.next_page_number &#125;&#125;})"&gt;next&lt;/a&gt;
+        &#123;% endif %&#125;
+    &lt;/span&gt;
+&lt;/div&gt;
+
+</pre>
+
+{% endblock %}

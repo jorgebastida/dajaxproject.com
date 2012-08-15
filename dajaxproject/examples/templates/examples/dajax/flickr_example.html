@@ -1,0 +1,125 @@
+{% extends "website/base_dajax_example.html"%}
+{% load url from future %}
+
+{% block breadcrumb_example %}Flickr in place editor{% endblock %}
+
+{% block example %}
+
+<style type="text/css" media="screen">
+
+	#title{
+		border:0px;
+		font-size:28px;
+		font-weight:bold;
+		padding: 13px 8px;
+		width:100%;
+	}
+
+	#title:hover{
+		background-color: rgb(255, 255, 211);
+	}
+
+	.editing{
+		border: 1px inset rgb(233, 233, 174) !important;
+		padding: 4px;
+		font-size: 22px;
+		font-weight: bold;
+		background-color: rgb(255, 255, 211);
+		margin-bottom: 5px;
+	}
+
+</style>
+<script type="text/javascript" charset="utf-8">
+	function toggle_editor(){
+		if(!$('#title').hasClass('editing')){
+			$('#title').addClass('editing');
+			$('#title').select();
+			$('#tools').show();
+		}
+	}
+
+	function cancel_edit(){
+		$('#tools').hide();
+		$('#title').removeClass('editing');
+		$('#title').blur();
+	}
+
+	function save(){
+		new_title = $('#title').val();
+		$('#title').val("saving...");
+		Dajaxice.examples.flickr_save(Dajax.process,{'new_title': new_title});
+
+	}
+</script>
+
+<h1>Flickr in place editor</h1>
+<p>In this example we will create a in place editor inspired in flickr.</p>
+
+<hr/>
+
+<div id="flickr_content">
+
+<input type="text" value="Default Title" id="title" onclick="toggle_editor();">
+
+<p id="tools" style="display:none;">
+
+<input class="btn btn-primary" id="save" value="SAVE" type="submit" onclick="save();"> <span>OR</span> <input value="Cancel" onclick="cancel_edit();" type="button" class="btn btn-danger">
+</p>
+
+<a href="http://www.flickr.com/photos/neo2001/3729766083/" target='_blank'><img src="http://farm3.static.flickr.com/2603/3729766083_bea42f3df7.jpg" alt="image"></a>
+
+</p>
+<hr/>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+from dajax.core import Dajax
+from dajaxice.decorators import dajaxice_register
+
+@dajaxice_register
+def flickr_save(request, new_title):
+    dajax = Dajax()
+    dajax.script('cancel_edit();')
+    dajax.assign('#title', 'value', new_title)
+    dajax.alert('Save complete using "%s"' % new_title)
+    return dajax.json()
+
+</pre>
+
+<h3>html</h3>
+<pre class="prettyprint language-html">
+&lt;input type="text" value="Default Title" id="title" onclick="toggle_editor();"&gt;
+&lt;p id="tools" style="display:none;"&gt;
+&lt;input id="save" value="SAVE" type="submit" onclick="save();"&gt; OR
+&lt;input value="Cancel" onclick="cancel_edit();" type="button"&gt;
+&lt;/p&gt;
+</pre>
+
+<h3>javascript</h3>
+<pre class="prettyprint language-js">
+function toggle_editor(){
+    if(!$('#title').hasClass('editing')){
+        $('#title').addClass('editing');
+        $('#title').select();
+        $('#tools').show();
+    }
+}
+
+function cancel_edit(){
+    $('#tools').hide();
+    $('#title').removeClass('editing');
+    $('#title').blur();
+}
+
+function save(){
+    new_title = $('#title').val();
+    $('#title').val("saving...");
+    Dajaxice.examples.flickr_save(Dajax.process,{'new_title': new_title});
+}
+</pre>
+
+
+{% endblock %}
+
+
+

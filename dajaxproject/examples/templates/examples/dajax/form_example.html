@@ -1,0 +1,51 @@
+{% extends "website/base_dajax_example.html"%}
+{% load url from future %}
+
+{% block breadcrumb_example %}Form Example{% endblock %}
+
+{% block example %}
+
+<h1>Form example</h1>
+<p>In this example, after selecting the option in the first combo it will load the options in the second combo.</p>
+
+<hr/>
+	<select onchange="Dajaxice.examples.updatecombo(Dajax.process, {'option':this.value})" size="1">
+		<option value="0">Select...</option>
+		<option value="0">Spain</option>
+		<option value="1">France</option>
+		<option value="2">United Kingdom</option>
+	</select>
+	<select id="combo2" onchange="" size="1"></select>
+<hr/>
+
+<h3>ajax.py</h3>
+<pre class="prettyprint language-py">
+from dajax.core import Dajax
+from dajaxice.decorators import dajaxice_register
+
+@dajaxice_register
+def updatecombo(request, option):
+    dajax = Dajax()
+    options = [['Madrid', 'Barcelona', 'Vitoria', 'Burgos'],
+               ['Paris', 'Evreux', 'Le Havre', 'Reims'],
+               ['London', 'Birmingham', 'Bristol', 'Cardiff']]
+    out = []
+    for option in options[int(option)]:
+        out.append("&lt;option value='#'&gt;%s&lt;/option&gt;" % option)
+
+    dajax.assign('#combo2', 'innerHTML', ''.join(out))
+    return dajax.json()
+</pre>
+
+<h3>html</h3>
+<pre class="prettyprint language-html">
+&lt;select onchange="Dajaxice.examples.updatecombo(Dajax.process, {'option':this.value})" size="1"&gt;
+    &lt;option value="0"&gt;Select...&lt;/option&gt;
+    &lt;option value="0"&gt;Spain&lt;/option&gt;
+    &lt;option value="1"&gt;France&lt;/option&gt;
+    &lt;option value="2"&gt;United Kingdom&lt;/option&gt;
+&lt;/select&gt;
+&lt;select id="combo2" onchange="" size="1"&gt;&lt;/select&gt;
+</pre>
+
+{% endblock %}
