@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from .examples import views as examples_views
+from examples import views as examples_views
 dajaxice_autodiscover()
 
 urlpatterns = patterns('',
