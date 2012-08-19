@@ -172,5 +172,3 @@ LOGGING = {
         }
     }
 }
-
-DAJAXICE_JSON2_JS_IMPORT = False
